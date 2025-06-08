@@ -447,7 +447,7 @@ class _UserPageState extends State<UserPage> {
                 ),
                 SizedBox(width: 12),
                 Text(
-                  'Hi, ${username ?? 'User'}!',
+                  'Hola ${username ?? 'Bienvenue'}!',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,

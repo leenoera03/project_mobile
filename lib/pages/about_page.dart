@@ -429,7 +429,7 @@ class _AboutPageState extends State<AboutPage> with TickerProviderStateMixin {
         ),
         SizedBox(height: 10), // Reduced from 12 to 10
         Text(
-          'Pesan #${index + 1}',
+          'Pesan ${index + 1}',
           style: TextStyle(
             fontSize: 15, // Reduced from 16 to 15
             fontWeight: FontWeight.bold,
