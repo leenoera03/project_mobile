@@ -12,9 +12,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Recipe App',
+      title: 'Lets Cook',
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        scaffoldBackgroundColor: Colors.white,
       ),
       home: SplashScreen(),
       debugShowCheckedModeBanner: false,
@@ -68,10 +69,10 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.restaurant_menu,
-              size: 100,
-              color: Colors.blue,
+            Image.asset(
+              'assets/cooking.png',
+              width: 100,
+              height: 100,
             ),
             SizedBox(height: 20),
             Text(

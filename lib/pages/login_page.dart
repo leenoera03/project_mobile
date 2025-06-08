@@ -19,11 +19,11 @@ class _LoginPageState extends State<LoginPage> {
   bool _obscurePassword = true;
   final DatabaseHelper _databaseHelper = DatabaseHelper();
 
-  // Color palette
-  static const Color primaryGreen = Color(0xFFC7DB9C);
-  static const Color softYellow = Color(0xFFFFF0BD);
-  static const Color salmonPink = Color(0xFFFDAB9E);
-  static const Color darkPink = Color(0xFFE50046);
+  // Color palette - White & Navy theme
+  static const Color primaryNavy = Color(0xFF001F3F);
+  static const Color pureWhite = Color(0xFFFFFFFF);
+  static const Color lightGrey = Color(0xFFF5F5F5);
+  static const Color darkGrey = Color(0xFF666666);
 
   @override
   void initState() {
@@ -113,7 +113,7 @@ class _LoginPageState extends State<LoginPage> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('Username atau password salah!'),
-              backgroundColor: darkPink,
+              backgroundColor: primaryNavy,
             ),
           );
         }
@@ -122,7 +122,7 @@ class _LoginPageState extends State<LoginPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Terjadi kesalahan saat login: $e'),
-            backgroundColor: darkPink,
+            backgroundColor: primaryNavy,
           ),
         );
       }
@@ -136,18 +136,10 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Gradient background
+      // White background
       body: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              primaryGreen.withOpacity(0.3),
-              softYellow.withOpacity(0.2),
-              Colors.white,
-            ],
-          ),
+          color: pureWhite,
         ),
         child: SafeArea(
           child: SingleChildScrollView(
@@ -166,34 +158,30 @@ class _LoginPageState extends State<LoginPage> {
                       Flexible(
                         child: Column(
                           children: [
-                            // Logo container with custom background
+                            // Logo container with navy background
                             Container(
                               width: 120,
                               height: 120,
                               decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  colors: [primaryGreen, softYellow],
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
-                                ),
+                                color: primaryNavy,
                                 borderRadius: BorderRadius.circular(60),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: primaryGreen.withOpacity(0.3),
-                                    blurRadius: 15,
-                                    offset: Offset(0, 8),
+                                    color: Colors.black.withOpacity(0.1),
+                                    blurRadius: 10,
+                                    offset: Offset(0, 5),
                                   ),
                                 ],
                               ),
                               child: Center(
                                   child: Image.asset(
-                                    'assets/logo.png',
+                                    'assets/cooking2.png',
                                     errorBuilder: (context, error, stackTrace) {
                                       return Icon(
                                         Icons.restaurant_menu,
                                         size: 60,
-                                        color: darkPink,
-                                      ); // Fallback
+                                        color: pureWhite,
+                                      ); // Fallback with white icon
                                     },
                                   )
                               ),
@@ -204,7 +192,7 @@ class _LoginPageState extends State<LoginPage> {
                               style: TextStyle(
                                 fontSize: 32,
                                 fontWeight: FontWeight.bold,
-                                color: darkPink,
+                                color: primaryNavy,
                                 letterSpacing: 1.2,
                               ),
                             ),
@@ -213,7 +201,7 @@ class _LoginPageState extends State<LoginPage> {
                               'Temukan resep disini',
                               style: TextStyle(
                                 fontSize: 16,
-                                color: Colors.grey[600],
+                                color: darkGrey,
                                 fontStyle: FontStyle.italic,
                               ),
                             ),
@@ -227,7 +215,7 @@ class _LoginPageState extends State<LoginPage> {
                           borderRadius: BorderRadius.circular(15),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.grey.withOpacity(0.1),
+                              color: Colors.black.withOpacity(0.1),
                               blurRadius: 10,
                               offset: Offset(0, 5),
                             ),
@@ -235,22 +223,31 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         child: TextFormField(
                           controller: _usernameController,
+                          style: TextStyle(color: primaryNavy),
                           decoration: InputDecoration(
                             labelText: 'Username',
                             labelStyle: TextStyle(color: Colors.grey[600]),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(15),
-                              borderSide: BorderSide.none,
+                              borderSide: BorderSide(color: lightGrey),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide: BorderSide(color: lightGrey),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide: BorderSide(color: primaryNavy, width: 2),
                             ),
                             filled: true,
-                            fillColor: Colors.white,
+                            fillColor: lightGrey,
                             prefixIcon: Container(
                               margin: EdgeInsets.all(8),
                               decoration: BoxDecoration(
-                                color: primaryGreen.withOpacity(0.2),
+                                color: primaryNavy.withOpacity(0.1),
                                 borderRadius: BorderRadius.circular(10),
                               ),
-                              child: Icon(Icons.person, color: darkPink),
+                              child: Icon(Icons.person, color: primaryNavy),
                             ),
                             contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
                           ),
@@ -269,7 +266,7 @@ class _LoginPageState extends State<LoginPage> {
                           borderRadius: BorderRadius.circular(15),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.grey.withOpacity(0.1),
+                              color: Colors.black.withOpacity(0.1),
                               blurRadius: 10,
                               offset: Offset(0, 5),
                             ),
@@ -277,22 +274,31 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         child: TextFormField(
                           controller: _passwordController,
+                          style: TextStyle(color: primaryNavy),
                           decoration: InputDecoration(
                             labelText: 'Password',
                             labelStyle: TextStyle(color: Colors.grey[600]),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(15),
-                              borderSide: BorderSide.none,
+                              borderSide: BorderSide(color: lightGrey),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide: BorderSide(color: lightGrey),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide: BorderSide(color: primaryNavy, width: 2),
                             ),
                             filled: true,
-                            fillColor: Colors.white,
+                            fillColor: lightGrey,
                             prefixIcon: Container(
                               margin: EdgeInsets.all(8),
                               decoration: BoxDecoration(
-                                color: salmonPink.withOpacity(0.2),
+                                color: primaryNavy.withOpacity(0.1),
                                 borderRadius: BorderRadius.circular(10),
                               ),
-                              child: Icon(Icons.lock, color: darkPink),
+                              child: Icon(Icons.lock, color: primaryNavy),
                             ),
                             suffixIcon: IconButton(
                               icon: Icon(
@@ -325,7 +331,7 @@ class _LoginPageState extends State<LoginPage> {
                           borderRadius: BorderRadius.circular(15),
                           boxShadow: [
                             BoxShadow(
-                              color: darkPink.withOpacity(0.3),
+                              color: primaryNavy.withOpacity(0.3),
                               blurRadius: 15,
                               offset: Offset(0, 8),
                             ),
@@ -334,8 +340,8 @@ class _LoginPageState extends State<LoginPage> {
                         child: ElevatedButton(
                           onPressed: _isLoading ? null : _login,
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: darkPink,
-                            foregroundColor: Colors.white,
+                            backgroundColor: primaryNavy,
+                            foregroundColor: pureWhite,
                             elevation: 0,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(15),
@@ -343,13 +349,12 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           child: _isLoading
                               ? CircularProgressIndicator(
-                            color: Colors.white,
+                            color: pureWhite,
                             strokeWidth: 2,
                           )
                               : Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(Icons.login, size: 20),
                               SizedBox(width: 8),
                               Text(
                                 'LOGIN',
@@ -370,7 +375,7 @@ class _LoginPageState extends State<LoginPage> {
                         height: 56,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(15),
-                          border: Border.all(color: darkPink, width: 2),
+                          border: Border.all(color: primaryNavy, width: 2),
                         ),
                         child: ElevatedButton(
                           onPressed: () {
@@ -380,8 +385,8 @@ class _LoginPageState extends State<LoginPage> {
                             );
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            foregroundColor: darkPink,
+                            backgroundColor: Colors.transparent,
+                            foregroundColor: primaryNavy,
                             elevation: 0,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(15),
@@ -416,17 +421,19 @@ class _LoginPageState extends State<LoginPage> {
                               showDialog(
                                 context: context,
                                 builder: (context) => AlertDialog(
-                                  title: Text('Database Users'),
+                                  backgroundColor: pureWhite,
+                                  title: Text('Database Users', style: TextStyle(color: primaryNavy)),
                                   content: Column(
                                     mainAxisSize: MainAxisSize.min,
                                     children: users.map((user) =>
-                                        Text('${user.username} - ${user.userType}')
+                                        Text('${user.username} - ${user.userType}',
+                                            style: TextStyle(color: primaryNavy))
                                     ).toList(),
                                   ),
                                   actions: [
                                     TextButton(
                                       onPressed: () => Navigator.pop(context),
-                                      child: Text('OK'),
+                                      child: Text('OK', style: TextStyle(color: primaryNavy)),
                                     ),
                                   ],
                                 ),
@@ -436,10 +443,10 @@ class _LoginPageState extends State<LoginPage> {
                             }
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.grey[300],
-                            foregroundColor: Colors.black,
+                            backgroundColor: lightGrey,
+                            foregroundColor: primaryNavy,
                           ),
-                          child: Text('DEBUG: Lihat Database Users'),
+                          child: Text('Database Users'),
                         ),
                       ),
                       SizedBox(height: 32),
@@ -447,17 +454,10 @@ class _LoginPageState extends State<LoginPage> {
                       Container(
                         width: double.infinity,
                         decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [
-                              softYellow.withOpacity(0.8),
-                              primaryGreen.withOpacity(0.3),
-                            ],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                          ),
+                          color: lightGrey,
                           borderRadius: BorderRadius.circular(15),
                           border: Border.all(
-                            color: primaryGreen.withOpacity(0.3),
+                            color: Colors.grey[300]!,
                             width: 1,
                           ),
                         ),
@@ -471,22 +471,22 @@ class _LoginPageState extends State<LoginPage> {
                                   Container(
                                     padding: EdgeInsets.all(8),
                                     decoration: BoxDecoration(
-                                      color: darkPink.withOpacity(0.1),
+                                      color: primaryNavy.withOpacity(0.1),
                                       borderRadius: BorderRadius.circular(8),
                                     ),
                                     child: Icon(
                                       Icons.info_outline,
-                                      color: darkPink,
+                                      color: primaryNavy,
                                       size: 20,
                                     ),
                                   ),
                                   SizedBox(width: 12),
                                   Text(
-                                    'Info Login',
+                                    'Clue',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 16,
-                                      color: darkPink,
+                                      color: primaryNavy,
                                     ),
                                   ),
                                 ],
@@ -497,7 +497,7 @@ class _LoginPageState extends State<LoginPage> {
                               Container(
                                 padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
                                 decoration: BoxDecoration(
-                                  color: Colors.white.withOpacity(0.7),
+                                  color: pureWhite,
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: Row(
@@ -508,11 +508,11 @@ class _LoginPageState extends State<LoginPage> {
                                         'User',
                                         style: TextStyle(
                                           fontWeight: FontWeight.w600,
-                                          color: darkPink,
+                                          color: primaryNavy,
                                         ),
                                       ),
                                     ),
-                                    Text(' : '),
+                                    Text(' : ', style: TextStyle(color: primaryNavy)),
                                     Expanded(
                                       child: Text(
                                         'Daftar akun baru atau gunakan akun yang sudah ada',
@@ -544,7 +544,7 @@ class _LoginPageState extends State<LoginPage> {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.7),
+        color: pureWhite,
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
@@ -555,11 +555,11 @@ class _LoginPageState extends State<LoginPage> {
               role,
               style: TextStyle(
                 fontWeight: FontWeight.w600,
-                color: darkPink,
+                color: primaryNavy,
               ),
             ),
           ),
-          Text(' : '),
+          Text(' : ', style: TextStyle(color: primaryNavy)),
           Expanded(
             child: Text(
               '$username, $password',

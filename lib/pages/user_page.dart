@@ -45,12 +45,13 @@ class _UserPageState extends State<UserPage> {
     zoom: 11.0,
   );
 
-  // Colors
-  static const Color primaryGreen = Color(0xFFC7DB9C);
-  static const Color accentYellow = Color(0xFFFFF0BD);
-  static const Color lightCoral = Color(0xFFFDAB9E);
-  static const Color darkGreen = Color(0xFF7BA05B);
-  static const Color darkPink = Color(0xFFE50046); // Tambahan untuk logout button
+  // Colors - Navy & White theme to match LoginPage
+  static const Color primaryNavy = Color(0xFF001F3F);
+  static const Color pureWhite = Color(0xFFFFFFFF);
+  static const Color lightGrey = Color(0xFFF5F5F5);
+  static const Color darkGrey = Color(0xFF666666);
+  static const Color accentBlue = Color(0xFF0074D9);
+  static const Color lightNavy = Color(0xFF2C5282);
 
   @override
   void initState() {
@@ -143,17 +144,25 @@ class _UserPageState extends State<UserPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Layanan Lokasi Tidak Aktif'),
-          content: Text('Silakan aktifkan layanan lokasi di pengaturan perangkat Anda.'),
+          backgroundColor: pureWhite,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          title: Text(
+            'Layanan Lokasi Tidak Aktif',
+            style: TextStyle(color: primaryNavy, fontWeight: FontWeight.bold),
+          ),
+          content: Text(
+            'Silakan aktifkan layanan lokasi di pengaturan perangkat Anda.',
+            style: TextStyle(color: darkGrey),
+          ),
           actions: [
             TextButton(
-              child: Text('OK'),
+              child: Text('OK', style: TextStyle(color: primaryNavy)),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: Text('Buka Pengaturan'),
+              child: Text('Buka Pengaturan', style: TextStyle(color: primaryNavy)),
               onPressed: () {
                 Navigator.of(context).pop();
                 Geolocator.openLocationSettings();
@@ -170,17 +179,25 @@ class _UserPageState extends State<UserPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Izin Lokasi Diperlukan'),
-          content: Text('Aplikasi memerlukan izin lokasi untuk menampilkan lokasi Anda. Silakan aktifkan di pengaturan aplikasi.'),
+          backgroundColor: pureWhite,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          title: Text(
+            'Izin Lokasi Diperlukan',
+            style: TextStyle(color: primaryNavy, fontWeight: FontWeight.bold),
+          ),
+          content: Text(
+            'Aplikasi memerlukan izin lokasi untuk menampilkan lokasi Anda. Silakan aktifkan di pengaturan aplikasi.',
+            style: TextStyle(color: darkGrey),
+          ),
           actions: [
             TextButton(
-              child: Text('OK'),
+              child: Text('OK', style: TextStyle(color: primaryNavy)),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: Text('Buka Pengaturan'),
+              child: Text('Buka Pengaturan', style: TextStyle(color: primaryNavy)),
               onPressed: () {
                 Navigator.of(context).pop();
                 Geolocator.openAppSettings();
@@ -384,7 +401,7 @@ class _UserPageState extends State<UserPage> {
             child: Icon(icon, color: color, size: 18),
           ),
           SizedBox(width: 12),
-          Text(text),
+          Text(text, style: TextStyle(color: primaryNavy)),
         ],
       ),
     );
@@ -394,14 +411,7 @@ class _UserPageState extends State<UserPage> {
   Widget _buildHomePage() {
     return Container(
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            primaryGreen.withOpacity(0.1),
-            accentYellow.withOpacity(0.05),
-          ],
-        ),
+        color: pureWhite,
       ),
       child: Column(
         children: [
@@ -409,19 +419,39 @@ class _UserPageState extends State<UserPage> {
           Container(
             width: double.infinity,
             padding: EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [lightGrey.withOpacity(0.3), pureWhite],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
+            ),
             child: Row(
               children: [
-                CircleAvatar(
-                  backgroundColor: darkGreen,
-                  child: Icon(Icons.person, color: Colors.white),
+                Container(
+                  decoration: BoxDecoration(
+                    color: primaryNavy,
+                    borderRadius: BorderRadius.circular(25),
+                    boxShadow: [
+                      BoxShadow(
+                        color: primaryNavy.withOpacity(0.2),
+                        blurRadius: 8,
+                        offset: Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: CircleAvatar(
+                    backgroundColor: Colors.transparent,
+                    child: Icon(Icons.person, color: pureWhite),
+                  ),
                 ),
                 SizedBox(width: 12),
                 Text(
-                  'Selamat datang, ${username ?? 'User'}!',
+                  'Hi, ${username ?? 'User'}!',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
-                    color: darkGreen,
+                    color: primaryNavy,
                   ),
                 ),
               ],
@@ -439,37 +469,61 @@ class _UserPageState extends State<UserPage> {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: darkGreen,
+                    color: primaryNavy,
                   ),
                 ),
                 SizedBox(height: 8),
-                TextField(
-                  controller: locationController,
-                  decoration: InputDecoration(
-                    hintText: 'Masukkan nama tempat atau alamat...',
-                    hintStyle: TextStyle(color: Colors.grey.shade600),
-                    prefixIcon: Icon(Icons.search, color: darkGreen),
-                    suffixIcon: locationController.text.isNotEmpty
-                        ? IconButton(
-                      icon: Icon(Icons.clear, color: darkGreen),
-                      onPressed: () {
-                        locationController.clear();
-                        _searchLocation('');
-                      },
-                    )
-                        : null,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide(color: primaryGreen),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide(color: darkGreen, width: 2),
-                    ),
-                    filled: true,
-                    fillColor: Colors.white,
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 10,
+                        offset: Offset(0, 5),
+                      ),
+                    ],
                   ),
-                  onChanged: _searchLocation,
+                  child: TextField(
+                    controller: locationController,
+                    style: TextStyle(color: primaryNavy),
+                    decoration: InputDecoration(
+                      hintText: 'Masukkan nama tempat atau alamat...',
+                      hintStyle: TextStyle(color: darkGrey),
+                      prefixIcon: Container(
+                        margin: EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: primaryNavy.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Icon(Icons.search, color: primaryNavy),
+                      ),
+                      suffixIcon: locationController.text.isNotEmpty
+                          ? IconButton(
+                        icon: Icon(Icons.clear, color: primaryNavy),
+                        onPressed: () {
+                          locationController.clear();
+                          _searchLocation('');
+                        },
+                      )
+                          : null,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                        borderSide: BorderSide(color: lightGrey),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                        borderSide: BorderSide(color: lightGrey),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                        borderSide: BorderSide(color: primaryNavy, width: 2),
+                      ),
+                      filled: true,
+                      fillColor: lightGrey,
+                    ),
+                    onChanged: _searchLocation,
+                  ),
                 ),
               ],
             ),
@@ -481,7 +535,7 @@ class _UserPageState extends State<UserPage> {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 20),
             child: Card(
-              elevation: 4,
+              elevation: 8,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
               ),
@@ -489,33 +543,43 @@ class _UserPageState extends State<UserPage> {
                 padding: EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16),
-                  gradient: LinearGradient(
-                    colors: [primaryGreen.withOpacity(0.1), Colors.white],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
+                  color: pureWhite,
+                  border: Border.all(color: lightGrey, width: 1),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
                       children: [
-                        Icon(Icons.location_on, color: lightCoral, size: 24),
+                        Container(
+                          padding: EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: primaryNavy.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Icon(Icons.location_on, color: primaryNavy, size: 24),
+                        ),
                         SizedBox(width: 8),
                         Text(
                           'Lokasi Saat Ini',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
-                            color: darkGreen,
+                            color: primaryNavy,
                           ),
                         ),
                         Spacer(),
                         if (!hasLocationPermission)
-                          IconButton(
-                            icon: Icon(Icons.refresh, color: darkGreen),
-                            onPressed: _checkPermissions,
-                            tooltip: 'Periksa izin lokasi',
+                          Container(
+                            decoration: BoxDecoration(
+                              color: primaryNavy.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: IconButton(
+                              icon: Icon(Icons.refresh, color: primaryNavy),
+                              onPressed: _checkPermissions,
+                              tooltip: 'Periksa izin lokasi',
+                            ),
                           ),
                       ],
                     ),
@@ -528,11 +592,11 @@ class _UserPageState extends State<UserPage> {
                             height: 20,
                             child: CircularProgressIndicator(
                               strokeWidth: 2,
-                              color: darkGreen,
+                              color: primaryNavy,
                             ),
                           ),
                           SizedBox(width: 12),
-                          Text('Mendapatkan lokasi...'),
+                          Text('Mendapatkan lokasi...', style: TextStyle(color: darkGrey)),
                         ],
                       )
                     else ...[
@@ -540,33 +604,33 @@ class _UserPageState extends State<UserPage> {
                         currentAddress,
                         style: TextStyle(
                           fontSize: 14,
-                          color: Colors.grey.shade700,
+                          color: darkGrey,
                         ),
                       ),
                       if (currentPosition != null) ...[
                         SizedBox(height: 8),
                         Row(
                           children: [
-                            Icon(Icons.my_location, size: 16, color: darkGreen),
+                            Icon(Icons.my_location, size: 16, color: primaryNavy),
                             SizedBox(width: 4),
                             Text(
                               'Lat: ${currentPosition!.latitude.toStringAsFixed(6)}',
                               style: TextStyle(
                                 fontSize: 12,
-                                color: Colors.grey.shade600,
+                                color: darkGrey,
                               ),
                             ),
                           ],
                         ),
                         Row(
                           children: [
-                            Icon(Icons.my_location, size: 16, color: darkGreen),
+                            Icon(Icons.my_location, size: 16, color: primaryNavy),
                             SizedBox(width: 4),
                             Text(
                               'Long: ${currentPosition!.longitude.toStringAsFixed(6)}',
                               style: TextStyle(
                                 fontSize: 12,
-                                color: Colors.grey.shade600,
+                                color: darkGrey,
                               ),
                             ),
                           ],
@@ -584,7 +648,7 @@ class _UserPageState extends State<UserPage> {
             child: Padding(
               padding: EdgeInsets.all(20),
               child: Card(
-                elevation: 4,
+                elevation: 8,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
                 ),
@@ -614,7 +678,7 @@ class _UserPageState extends State<UserPage> {
             Padding(
               padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
               child: Card(
-                elevation: 4,
+                elevation: 8,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
                 ),
@@ -622,25 +686,29 @@ class _UserPageState extends State<UserPage> {
                   padding: EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16),
-                    gradient: LinearGradient(
-                      colors: [lightCoral.withOpacity(0.1), Colors.white],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
+                    color: pureWhite,
+                    border: Border.all(color: lightGrey, width: 1),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
                         children: [
-                          Icon(Icons.place, color: lightCoral, size: 24),
+                          Container(
+                            padding: EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: accentBlue.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Icon(Icons.place, color: accentBlue, size: 24),
+                          ),
                           SizedBox(width: 8),
                           Text(
                             'Lokasi Pencarian',
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
-                              color: darkGreen,
+                              color: primaryNavy,
                             ),
                           ),
                         ],
@@ -650,32 +718,32 @@ class _UserPageState extends State<UserPage> {
                         selectedAddress,
                         style: TextStyle(
                           fontSize: 14,
-                          color: Colors.grey.shade700,
+                          color: darkGrey,
                         ),
                       ),
                       SizedBox(height: 8),
                       Row(
                         children: [
-                          Icon(Icons.my_location, size: 16, color: darkGreen),
+                          Icon(Icons.my_location, size: 16, color: primaryNavy),
                           SizedBox(width: 4),
                           Text(
                             'Lat: ${selectedLocation!.latitude.toStringAsFixed(6)}',
                             style: TextStyle(
                               fontSize: 12,
-                              color: Colors.grey.shade600,
+                              color: darkGrey,
                             ),
                           ),
                         ],
                       ),
                       Row(
                         children: [
-                          Icon(Icons.my_location, size: 16, color: darkGreen),
+                          Icon(Icons.my_location, size: 16, color: primaryNavy),
                           SizedBox(width: 4),
                           Text(
                             'Long: ${selectedLocation!.longitude.toStringAsFixed(6)}',
                             style: TextStyle(
                               fontSize: 12,
-                              color: Colors.grey.shade600,
+                              color: darkGrey,
                             ),
                           ),
                         ],
@@ -693,23 +761,31 @@ class _UserPageState extends State<UserPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade50,
+      backgroundColor: pureWhite,
       appBar: _currentIndex == 0 ? AppBar(
-        backgroundColor: primaryGreen,
-        elevation: 0,
+        backgroundColor: pureWhite,
+        elevation: 2,
+        shadowColor: Colors.black.withOpacity(0.1),
         title: Text(
           'Layanan Lokasi',
           style: TextStyle(
-            color: darkGreen,
+            color: primaryNavy,
             fontWeight: FontWeight.bold,
             fontSize: 20,
           ),
         ),
         actions: [
-          IconButton(
-            icon: Icon(Icons.my_location, color: darkGreen),
-            onPressed: _getCurrentLocation,
-            tooltip: 'Dapatkan lokasi saat ini',
+          Container(
+            margin: EdgeInsets.only(right: 8),
+            decoration: BoxDecoration(
+              color: lightGrey,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: IconButton(
+              icon: Icon(Icons.my_location, color: primaryNavy),
+              onPressed: _getCurrentLocation,
+              tooltip: 'Dapatkan lokasi saat ini',
+            ),
           ),
           // Tombol logout menggunakan PopupMenuButton
           Container(
@@ -718,14 +794,15 @@ class _UserPageState extends State<UserPage> {
               icon: Container(
                 padding: EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.2),
+                  color: lightGrey,
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: Icon(Icons.more_vert, color: darkGreen),
+                child: Icon(Icons.more_vert, color: primaryNavy),
               ),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
+              color: pureWhite,
               onSelected: (String result) {
                 if (result == 'logout') {
                   _logout();
@@ -734,7 +811,7 @@ class _UserPageState extends State<UserPage> {
               itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
                 PopupMenuItem<String>(
                   value: 'logout',
-                  child: _buildMenuRow(Icons.logout, 'Logout', darkPink),
+                  child: _buildMenuRow(Icons.logout, 'Logout', primaryNavy),
                 ),
               ],
             ),
@@ -748,6 +825,7 @@ class _UserPageState extends State<UserPage> {
       // Bottom Navigation Bar
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
+          color: pureWhite,
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.1),
@@ -758,9 +836,9 @@ class _UserPageState extends State<UserPage> {
         ),
         child: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
-          backgroundColor: Colors.white,
-          selectedItemColor: darkGreen,
-          unselectedItemColor: Colors.grey,
+          backgroundColor: pureWhite,
+          selectedItemColor: primaryNavy,
+          unselectedItemColor: darkGrey,
           selectedLabelStyle: TextStyle(
             fontWeight: FontWeight.w600,
             fontSize: 12,

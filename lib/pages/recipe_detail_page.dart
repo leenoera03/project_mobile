@@ -85,6 +85,57 @@ class RecipeDetailPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Price Card (New)
+                  if (recipe.standardPrice != null) ...[
+                    Card(
+                      elevation: 4,
+                      child: Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          gradient: LinearGradient(
+                            colors: [Colors.green.shade400, Colors.green.shade600],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.attach_money,
+                                  color: Colors.white,
+                                  size: 24,
+                                ),
+                                SizedBox(width: 8),
+                                Text(
+                                  'Estimasi Harga',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Text(
+                              recipe.getFormattedPrice(),
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 16),
+                  ],
+
                   // Info Cards
                   Row(
                     children: [
@@ -110,15 +161,6 @@ class RecipeDetailPage extends StatelessWidget {
                   SizedBox(height: 8),
                   Row(
                     children: [
-                      Expanded(
-                        child: _buildInfoCard(
-                          icon: Icons.star,
-                          title: 'Rating',
-                          value: '${recipe.rating}/5 (${recipe.reviewCount})',
-                          color: Colors.orange,
-                        ),
-                      ),
-                      SizedBox(width: 8),
                       Expanded(
                         child: _buildInfoCard(
                           icon: Icons.local_fire_department,

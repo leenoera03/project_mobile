@@ -14,14 +14,14 @@ class _SearchPageState extends State<SearchPage> {
   List<Recipes> allRecipes = [];
   List<Recipes> searchResults = [];
   TextEditingController searchController = TextEditingController();
-  bool isLoading = true; // Changed to true initially
+  bool isLoading = true;
   bool hasSearched = false;
 
-  // Colors dari UserPage
-  static const Color primaryGreen = Color(0xFFC7DB9C);
-  static const Color accentYellow = Color(0xFFFFF0BD);
-  static const Color lightCoral = Color(0xFFFDAB9E);
-  static const Color darkGreen = Color(0xFF7BA05B);
+  // Navy & White theme colors - matching LoginPage
+  static const Color primaryNavy = Color(0xFF001F3F);
+  static const Color pureWhite = Color(0xFFFFFFFF);
+  static const Color lightGrey = Color(0xFFF5F5F5);
+  static const Color darkGrey = Color(0xFF666666);
 
   @override
   void initState() {
@@ -40,9 +40,9 @@ class _SearchPageState extends State<SearchPage> {
       List<Recipes> recipes = await RecipeService.getAllRecipes();
       setState(() {
         allRecipes = recipes;
-        searchResults = recipes; // Show all recipes initially
+        searchResults = recipes;
         isLoading = false;
-        hasSearched = true; // Set to true so it shows the recipe list
+        hasSearched = true;
       });
     } catch (e) {
       print('Error loading recipes: $e');
@@ -58,11 +58,10 @@ class _SearchPageState extends State<SearchPage> {
       hasSearched = true;
     });
 
-    // Simulate search delay
     Future.delayed(Duration(milliseconds: 300), () {
       if (query.isEmpty) {
         setState(() {
-          searchResults = allRecipes; // Show all recipes when search is empty
+          searchResults = allRecipes;
           isLoading = false;
         });
         return;
@@ -84,74 +83,105 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              primaryGreen.withOpacity(0.2),
-              accentYellow.withOpacity(0.1),
-            ],
-          ),
-        ),
-        child: SafeArea(
-          child: Column(
-            children: [
-              // Header
-              Padding(
-                padding: const EdgeInsets.all(16.0),
+      backgroundColor: pureWhite,
+      body: SafeArea(
+        child: Column(
+          children: [
+            // Header with navy background
+            Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: primaryNavy,
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(25),
+                  bottomRight: Radius.circular(25),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 10,
+                    offset: Offset(0, 5),
+                  ),
+                ],
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(24.0),
                 child: Column(
                   children: [
                     Text(
                       'Cari Resep',
                       style: TextStyle(
-                        fontSize: 24,
+                        fontSize: 28,
                         fontWeight: FontWeight.bold,
-                        color: darkGreen,
+                        color: pureWhite,
+                        letterSpacing: 1.2,
                       ),
                     ),
-                    SizedBox(height: 16),
+                    SizedBox(height: 20),
 
-                    // Search Bar
-                    TextField(
-                      controller: searchController,
-                      decoration: InputDecoration(
-                        hintText: 'Cari resep, masakan, atau tag...',
-                        hintStyle: TextStyle(color: Colors.grey.shade600),
-                        prefixIcon: Icon(Icons.search, color: darkGreen),
-                        suffixIcon: searchController.text.isNotEmpty
-                            ? IconButton(
-                          icon: Icon(Icons.clear, color: darkGreen),
-                          onPressed: () {
-                            searchController.clear();
-                            _performSearch('');
-                          },
-                        )
-                            : null,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: primaryGreen),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: darkGreen, width: 2),
-                        ),
-                        filled: true,
-                        fillColor: Colors.white,
+                    // Search Bar with white background
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            blurRadius: 10,
+                            offset: Offset(0, 5),
+                          ),
+                        ],
                       ),
-                      onChanged: _performSearch,
+                      child: TextField(
+                        controller: searchController,
+                        style: TextStyle(color: primaryNavy),
+                        decoration: InputDecoration(
+                          hintText: 'Cari resep, masakan, atau tag...',
+                          hintStyle: TextStyle(color: Colors.grey[600]),
+                          prefixIcon: Container(
+                            margin: EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: primaryNavy.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Icon(Icons.search, color: primaryNavy),
+                          ),
+                          suffixIcon: searchController.text.isNotEmpty
+                              ? IconButton(
+                            icon: Icon(Icons.clear, color: primaryNavy),
+                            onPressed: () {
+                              searchController.clear();
+                              _performSearch('');
+                            },
+                          )
+                              : null,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            borderSide: BorderSide.none,
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            borderSide: BorderSide(color: primaryNavy, width: 2),
+                          ),
+                          filled: true,
+                          fillColor: pureWhite,
+                          contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                        ),
+                        onChanged: (value) {
+                          setState(() {}); // Rebuild to show/hide clear button
+                          _performSearch(value);
+                        },
+                      ),
                     ),
                   ],
                 ),
               ),
+            ),
 
-              // Search Results
-              Expanded(
-                child: _buildSearchResults(),
-              ),
-            ],
-          ),
+            // Search Results
+            Expanded(
+              child: _buildSearchResults(),
+            ),
+          ],
         ),
       ),
     );
@@ -163,15 +193,24 @@ class _SearchPageState extends State<SearchPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CircularProgressIndicator(
-              color: darkGreen,
+            Container(
+              padding: EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: primaryNavy.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: CircularProgressIndicator(
+                color: primaryNavy,
+                strokeWidth: 3,
+              ),
             ),
-            SizedBox(height: 16),
+            SizedBox(height: 20),
             Text(
               'Memuat resep...',
               style: TextStyle(
                 fontSize: 16,
-                color: darkGreen,
+                color: primaryNavy,
+                fontWeight: FontWeight.w500,
               ),
             ),
           ],
@@ -181,56 +220,88 @@ class _SearchPageState extends State<SearchPage> {
 
     if (searchResults.isEmpty && searchController.text.isNotEmpty) {
       return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.search_off,
-              size: 80,
-              color: lightCoral,
-            ),
-            SizedBox(height: 16),
-            Text(
-              'Tidak ada resep ditemukan',
-              style: TextStyle(
-                fontSize: 18,
-                color: darkGreen,
-                fontWeight: FontWeight.w500,
+        child: Container(
+          margin: EdgeInsets.all(24),
+          padding: EdgeInsets.all(32),
+          decoration: BoxDecoration(
+            color: lightGrey,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: Colors.grey[300]!, width: 1),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                padding: EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: primaryNavy.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(50),
+                ),
+                child: Icon(
+                  Icons.search_off,
+                  size: 60,
+                  color: primaryNavy,
+                ),
               ),
-            ),
-            SizedBox(height: 8),
-            Text(
-              'Coba kata kunci yang berbeda',
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey.shade600,
+              SizedBox(height: 24),
+              Text(
+                'Tidak ada resep ditemukan',
+                style: TextStyle(
+                  fontSize: 20,
+                  color: primaryNavy,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-          ],
+              SizedBox(height: 12),
+              Text(
+                'Coba kata kunci yang berbeda',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: darkGrey,
+                ),
+              ),
+            ],
+          ),
         ),
       );
     }
 
     if (searchResults.isEmpty && allRecipes.isEmpty && !isLoading) {
       return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.restaurant_menu,
-              size: 80,
-              color: darkGreen.withOpacity(0.5),
-            ),
-            SizedBox(height: 16),
-            Text(
-              'Belum ada resep tersedia',
-              style: TextStyle(
-                fontSize: 18,
-                color: darkGreen,
-                fontWeight: FontWeight.w500,
+        child: Container(
+          margin: EdgeInsets.all(24),
+          padding: EdgeInsets.all(32),
+          decoration: BoxDecoration(
+            color: lightGrey,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: Colors.grey[300]!, width: 1),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                padding: EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: primaryNavy.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(50),
+                ),
+                child: Icon(
+                  Icons.restaurant_menu,
+                  size: 60,
+                  color: primaryNavy,
+                ),
               ),
-            ),
-          ],
+              SizedBox(height: 24),
+              Text(
+                'Belum ada resep tersedia',
+                style: TextStyle(
+                  fontSize: 20,
+                  color: primaryNavy,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
         ),
       );
     }
@@ -239,17 +310,20 @@ class _SearchPageState extends State<SearchPage> {
       children: [
         // Show result count
         if (searchController.text.isNotEmpty)
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'Ditemukan ${searchResults.length} resep',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey.shade600,
-                  fontWeight: FontWeight.w500,
-                ),
+          Container(
+            width: double.infinity,
+            margin: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            decoration: BoxDecoration(
+              color: primaryNavy.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Text(
+              'Ditemukan ${searchResults.length} resep',
+              style: TextStyle(
+                fontSize: 16,
+                color: primaryNavy,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ),
@@ -260,29 +334,45 @@ class _SearchPageState extends State<SearchPage> {
             itemCount: searchResults.length,
             itemBuilder: (context, index) {
               final recipe = searchResults[index];
-              return Card(
-                margin: EdgeInsets.only(bottom: 12),
-                elevation: 3,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+              return Container(
+                margin: EdgeInsets.only(bottom: 16),
+                decoration: BoxDecoration(
+                  color: pureWhite,
+                  borderRadius: BorderRadius.circular(15),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 10,
+                      offset: Offset(0, 5),
+                    ),
+                  ],
+                  border: Border.all(
+                    color: Colors.grey[200]!,
+                    width: 1,
+                  ),
                 ),
                 child: ListTile(
+                  contentPadding: EdgeInsets.all(16),
                   leading: ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(12),
                     child: Image.network(
                       recipe.image,
-                      width: 60,
-                      height: 60,
+                      width: 70,
+                      height: 70,
                       fit: BoxFit.cover,
                       errorBuilder: (context, error, stackTrace) {
                         return Container(
-                          width: 60,
-                          height: 60,
+                          width: 70,
+                          height: 70,
                           decoration: BoxDecoration(
-                            color: primaryGreen.withOpacity(0.3),
-                            borderRadius: BorderRadius.circular(8),
+                            color: primaryNavy.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(12),
                           ),
-                          child: Icon(Icons.restaurant, color: darkGreen),
+                          child: Icon(
+                            Icons.restaurant,
+                            color: primaryNavy,
+                            size: 30,
+                          ),
                         );
                       },
                     ),
@@ -291,27 +381,77 @@ class _SearchPageState extends State<SearchPage> {
                     recipe.name,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: darkGreen,
+                      color: primaryNavy,
+                      fontSize: 16,
                     ),
                   ),
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(recipe.cuisine),
                       SizedBox(height: 4),
+                      Text(
+                        recipe.cuisine,
+                        style: TextStyle(
+                          color: darkGrey,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      SizedBox(height: 8),
                       Row(
                         children: [
-                          Icon(Icons.star, color: accentYellow, size: 16),
-                          SizedBox(width: 4),
-                          Text('${recipe.rating.toStringAsFixed(1)}'),
-                          SizedBox(width: 16),
-                          Icon(Icons.access_time, color: Colors.grey, size: 16),
-                          SizedBox(width: 4),
-                          Text('${recipe.prepTimeMinutes + recipe.cookTimeMinutes} min'),
+                          // Price container (replacing rating)
+                          if (recipe.standardPrice != null) ...[
+                            Container(
+                              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                              decoration: BoxDecoration(
+                                color: Colors.green.withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  SizedBox(width: 4),
+                                  Text(
+                                    recipe.getFormattedPrice(),
+                                    style: TextStyle(
+                                      color: Colors.green[700],
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(width: 12),
+                          ],
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                            decoration: BoxDecoration(
+                              color: lightGrey,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(Icons.access_time, color: darkGrey, size: 16),
+                                SizedBox(width: 4),
+                                Text(
+                                  '${recipe.prepTimeMinutes + recipe.cookTimeMinutes} min',
+                                  style: TextStyle(
+                                    color: darkGrey,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                     ],
                   ),
+
                   onTap: () {
                     Navigator.push(
                       context,

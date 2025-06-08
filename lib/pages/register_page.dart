@@ -17,11 +17,12 @@ class _RegisterPageState extends State<RegisterPage> {
   bool _obscureConfirmPassword = true;
   final DatabaseHelper _databaseHelper = DatabaseHelper();
 
-  // Color palette (sama dengan login page)
-  static const Color primaryGreen = Color(0xFFC7DB9C);
-  static const Color softYellow = Color(0xFFFFF0BD);
-  static const Color salmonPink = Color(0xFFFDAB9E);
-  static const Color darkPink = Color(0xFFE50046);
+  // Color palette - White & Navy theme (sama dengan login page)
+  static const Color primaryNavy = Color(0xFF001F3F);
+  static const Color pureWhite = Color(0xFFFFFFFF);
+  static const Color lightGrey = Color(0xFFF5F5F5);
+  static const Color darkGrey = Color(0xFF666666);
+  static const Color darkPink = Color(0xFFE91E63);
 
   @override
   void dispose() {
@@ -32,7 +33,7 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   _register() async {
-    // Debug print untuk melihat apakah fungsi dipanggil
+    // Debug print để melihat apakah fungsi dipanggil
     print('Register function called');
 
     if (_formKey.currentState!.validate()) {
@@ -61,7 +62,7 @@ class _RegisterPageState extends State<RegisterPage> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('Registrasi berhasil! Silakan login.'),
-              backgroundColor: primaryGreen,
+              backgroundColor: primaryNavy,
               duration: Duration(seconds: 3),
             ),
           );
@@ -81,7 +82,7 @@ class _RegisterPageState extends State<RegisterPage> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('Username sudah digunakan! Pilih username lain.'),
-              backgroundColor: darkPink,
+              backgroundColor: Colors.red[600],
               duration: Duration(seconds: 3),
             ),
           );
@@ -91,7 +92,7 @@ class _RegisterPageState extends State<RegisterPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Terjadi kesalahan saat registrasi: ${e.toString()}'),
-            backgroundColor: darkPink,
+            backgroundColor: Colors.red[600],
             duration: Duration(seconds: 3),
           ),
         );
@@ -106,7 +107,7 @@ class _RegisterPageState extends State<RegisterPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Mohon periksa kembali data yang dimasukkan'),
-          backgroundColor: darkPink,
+          backgroundColor: Colors.red[600],
           duration: Duration(seconds: 2),
         ),
       );
@@ -116,17 +117,10 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // White background
       body: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              primaryGreen.withOpacity(0.3),
-              softYellow.withOpacity(0.2),
-              Colors.white,
-            ],
-          ),
+          color: pureWhite,
         ),
         child: SafeArea(
           child: SingleChildScrollView(
@@ -145,22 +139,18 @@ class _RegisterPageState extends State<RegisterPage> {
                       Flexible(
                         child: Column(
                           children: [
-                            // Logo container
+                            // Logo container with navy background
                             Container(
                               width: 120,
                               height: 120,
                               decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  colors: [primaryGreen, softYellow],
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
-                                ),
+                                color: primaryNavy,
                                 borderRadius: BorderRadius.circular(60),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: primaryGreen.withOpacity(0.3),
-                                    blurRadius: 15,
-                                    offset: Offset(0, 8),
+                                    color: Colors.black.withOpacity(0.1),
+                                    blurRadius: 10,
+                                    offset: Offset(0, 5),
                                   ),
                                 ],
                               ),
@@ -168,26 +158,26 @@ class _RegisterPageState extends State<RegisterPage> {
                                 child: Icon(
                                   Icons.person_add,
                                   size: 60,
-                                  color: darkPink,
+                                  color: pureWhite,
                                 ),
                               ),
                             ),
                             SizedBox(height: 24),
                             Text(
-                              'Daftar Akun Baru',
+                              'Register',
                               style: TextStyle(
                                 fontSize: 32,
                                 fontWeight: FontWeight.bold,
-                                color: darkPink,
+                                color: primaryNavy,
                                 letterSpacing: 1.2,
                               ),
                             ),
                             SizedBox(height: 8),
                             Text(
-                              'Buat akun untuk mengakses resep',
+                              'Buat akun untuk melihat resep',
                               style: TextStyle(
                                 fontSize: 16,
-                                color: Colors.grey[600],
+                                color: darkGrey,
                                 fontStyle: FontStyle.italic,
                               ),
                             ),
@@ -201,7 +191,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           borderRadius: BorderRadius.circular(15),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.grey.withOpacity(0.1),
+                              color: Colors.black.withOpacity(0.1),
                               blurRadius: 10,
                               offset: Offset(0, 5),
                             ),
@@ -209,22 +199,31 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                         child: TextFormField(
                           controller: _usernameController,
+                          style: TextStyle(color: primaryNavy),
                           decoration: InputDecoration(
                             labelText: 'Username',
                             labelStyle: TextStyle(color: Colors.grey[600]),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(15),
-                              borderSide: BorderSide.none,
+                              borderSide: BorderSide(color: lightGrey),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide: BorderSide(color: lightGrey),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide: BorderSide(color: primaryNavy, width: 2),
                             ),
                             filled: true,
-                            fillColor: Colors.white,
+                            fillColor: lightGrey,
                             prefixIcon: Container(
                               margin: EdgeInsets.all(8),
                               decoration: BoxDecoration(
-                                color: primaryGreen.withOpacity(0.2),
+                                color: primaryNavy.withOpacity(0.1),
                                 borderRadius: BorderRadius.circular(10),
                               ),
-                              child: Icon(Icons.person, color: darkPink),
+                              child: Icon(Icons.person, color: primaryNavy),
                             ),
                             contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
                           ),
@@ -253,7 +252,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           borderRadius: BorderRadius.circular(15),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.grey.withOpacity(0.1),
+                              color: Colors.black.withOpacity(0.1),
                               blurRadius: 10,
                               offset: Offset(0, 5),
                             ),
@@ -261,22 +260,31 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                         child: TextFormField(
                           controller: _passwordController,
+                          style: TextStyle(color: primaryNavy),
                           decoration: InputDecoration(
                             labelText: 'Password',
                             labelStyle: TextStyle(color: Colors.grey[600]),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(15),
-                              borderSide: BorderSide.none,
+                              borderSide: BorderSide(color: lightGrey),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide: BorderSide(color: lightGrey),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide: BorderSide(color: primaryNavy, width: 2),
                             ),
                             filled: true,
-                            fillColor: Colors.white,
+                            fillColor: lightGrey,
                             prefixIcon: Container(
                               margin: EdgeInsets.all(8),
                               decoration: BoxDecoration(
-                                color: salmonPink.withOpacity(0.2),
+                                color: primaryNavy.withOpacity(0.1),
                                 borderRadius: BorderRadius.circular(10),
                               ),
-                              child: Icon(Icons.lock, color: darkPink),
+                              child: Icon(Icons.lock, color: primaryNavy),
                             ),
                             suffixIcon: IconButton(
                               icon: Icon(
@@ -310,7 +318,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           borderRadius: BorderRadius.circular(15),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.grey.withOpacity(0.1),
+                              color: Colors.black.withOpacity(0.1),
                               blurRadius: 10,
                               offset: Offset(0, 5),
                             ),
@@ -318,22 +326,31 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                         child: TextFormField(
                           controller: _confirmPasswordController,
+                          style: TextStyle(color: primaryNavy),
                           decoration: InputDecoration(
                             labelText: 'Konfirmasi Password',
                             labelStyle: TextStyle(color: Colors.grey[600]),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(15),
-                              borderSide: BorderSide.none,
+                              borderSide: BorderSide(color: lightGrey),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide: BorderSide(color: lightGrey),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide: BorderSide(color: primaryNavy, width: 2),
                             ),
                             filled: true,
-                            fillColor: Colors.white,
+                            fillColor: lightGrey,
                             prefixIcon: Container(
                               margin: EdgeInsets.all(8),
                               decoration: BoxDecoration(
-                                color: salmonPink.withOpacity(0.2),
+                                color: primaryNavy.withOpacity(0.1),
                                 borderRadius: BorderRadius.circular(10),
                               ),
-                              child: Icon(Icons.lock_outline, color: darkPink),
+                              child: Icon(Icons.lock_outline, color: primaryNavy),
                             ),
                             suffixIcon: IconButton(
                               icon: Icon(
@@ -369,7 +386,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           borderRadius: BorderRadius.circular(15),
                           boxShadow: [
                             BoxShadow(
-                              color: darkPink.withOpacity(0.3),
+                              color: primaryNavy.withOpacity(0.3),
                               blurRadius: 15,
                               offset: Offset(0, 8),
                             ),
@@ -381,8 +398,8 @@ class _RegisterPageState extends State<RegisterPage> {
                             _register();
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: darkPink,
-                            foregroundColor: Colors.white,
+                            backgroundColor: primaryNavy,
+                            foregroundColor: pureWhite,
                             elevation: 0,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(15),
@@ -390,13 +407,12 @@ class _RegisterPageState extends State<RegisterPage> {
                           ),
                           child: _isLoading
                               ? CircularProgressIndicator(
-                            color: Colors.white,
+                            color: pureWhite,
                             strokeWidth: 2,
                           )
                               : Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(Icons.person_add, size: 20),
                               SizedBox(width: 8),
                               Text(
                                 'DAFTAR',
@@ -411,9 +427,9 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                       ),
                       SizedBox(height: 24),
-                      // Back to login button
-                      TextButton(
-                        onPressed: () {
+                      // Login link text
+                      GestureDetector(
+                        onTap: () {
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(builder: (context) => LoginPage()),
@@ -429,11 +445,63 @@ class _RegisterPageState extends State<RegisterPage> {
                             Text(
                               'Login di sini',
                               style: TextStyle(
-                                color: darkPink,
+                                color: primaryNavy,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                           ],
+                        ),
+                      ),
+                      SizedBox(height: 32),
+                      // Info card
+                      Container(
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: lightGrey,
+                          borderRadius: BorderRadius.circular(15),
+                          border: Border.all(
+                            color: Colors.grey[300]!,
+                            width: 1,
+                          ),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.all(20),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.all(8),
+                                    decoration: BoxDecoration(
+                                      color: primaryNavy.withOpacity(0.1),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Icon(
+                                      Icons.info_outline,
+                                      color: primaryNavy,
+                                      size: 20,
+                                    ),
+                                  ),
+                                  SizedBox(width: 12),
+                                  Text(
+                                    'Syarat',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                      color: primaryNavy,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 16),
+                              _buildInfoRow('Username', 'Minimal 3 karakter, tanpa spasi'),
+                              SizedBox(height: 8),
+                              _buildInfoRow('Password', 'Minimal 6 karakter'),
+                              SizedBox(height: 8),
+                              _buildInfoRow('Akses', 'Setelah daftar, Anda bisa langsung login'),
+                            ],
+                          ),
                         ),
                       ),
                     ],
@@ -443,6 +511,41 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildInfoRow(String label, String description) {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+      decoration: BoxDecoration(
+        color: pureWhite,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 80,
+            child: Text(
+              label,
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+                color: primaryNavy,
+              ),
+            ),
+          ),
+          Text(' : ', style: TextStyle(color: primaryNavy)),
+          Expanded(
+            child: Text(
+              description,
+              style: TextStyle(
+                color: Colors.grey[700],
+                fontSize: 13,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

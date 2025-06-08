@@ -49,6 +49,8 @@ class Recipes {
   double rating;
   int reviewCount;
   List<String> mealType;
+  double? standardPrice;  // Added standard_price field
+  String? currency;       // Added currency field
 
   Recipes({
     required this.id,
@@ -67,6 +69,8 @@ class Recipes {
     required this.rating,
     required this.reviewCount,
     required this.mealType,
+    this.standardPrice,     // Optional parameter
+    this.currency,          // Optional parameter
   });
 
   factory Recipes.fromJson(Map<String, dynamic> json) {
@@ -87,6 +91,10 @@ class Recipes {
       rating: (json['rating'] as num).toDouble(),
       reviewCount: json['reviewCount'],
       mealType: List<String>.from(json['mealType']),
+      standardPrice: json['standard_price'] != null
+          ? (json['standard_price'] as num).toDouble()
+          : null,
+      currency: json['currency'],
     );
   }
 
@@ -108,6 +116,24 @@ class Recipes {
       'rating': rating,
       'reviewCount': reviewCount,
       'mealType': mealType,
+      'standard_price': standardPrice,
+      'currency': currency,
     };
+  }
+
+  // Helper method to get formatted price
+  String getFormattedPrice() {
+    if (standardPrice == null) return 'Price not available';
+
+    if (currency == 'USD') {
+      return '\$${standardPrice!.toStringAsFixed(2)}';
+    } else if (currency == 'IDR') {
+      return 'Rp ${standardPrice!.toStringAsFixed(0).replaceAllMapped(
+          RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+              (Match m) => '${m[1]}.'
+      )}';
+    } else {
+      return '${standardPrice!.toStringAsFixed(2)} ${currency ?? ''}';
+    }
   }
 }

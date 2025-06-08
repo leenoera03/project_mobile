@@ -13,11 +13,13 @@ class _ProfilePageState extends State<ProfilePage> {
   String? username;
   String? email;
 
-  // Colors dari UserPage
-  static const Color primaryGreen = Color(0xFFC7DB9C);
-  static const Color accentYellow = Color(0xFFFFF0BD);
-  static const Color lightCoral = Color(0xFFFDAB9E);
-  static const Color darkGreen = Color(0xFF7BA05B);
+  // Colors - Navy & White theme to match UserPage and LoginPage
+  static const Color primaryNavy = Color(0xFF001F3F);
+  static const Color pureWhite = Color(0xFFFFFFFF);
+  static const Color lightGrey = Color(0xFFF5F5F5);
+  static const Color darkGrey = Color(0xFF666666);
+  static const Color accentBlue = Color(0xFF0074D9);
+  static const Color lightNavy = Color(0xFF2C5282);
 
   @override
   void initState() {
@@ -44,157 +46,244 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              primaryGreen.withOpacity(0.2),
-              accentYellow.withOpacity(0.1),
-            ],
-          ),
-        ),
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                // Header
-                Text(
-                  'Profil Saya',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: darkGreen,
-                  ),
-                ),
-                SizedBox(height: 30),
-
-                // Profile Card
-                Card(
-                  elevation: 4,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Column(
-                      children: [
-                        // Avatar
-                        Container(
-                          width: 100,
-                          height: 100,
-                          decoration: BoxDecoration(
-                            color: darkGreen,
-                            shape: BoxShape.circle,
-                          ),
-                          child: Icon(
-                            Icons.person,
-                            size: 50,
-                            color: Colors.white,
-                          ),
-                        ),
-                        SizedBox(height: 16),
-
-                        // Username
-                        Text(
-                          username ?? 'User',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: darkGreen,
-                          ),
-                        ),
-                        SizedBox(height: 8),
-
-                        // Email
-                        Text(
-                          email ?? 'user@example.com',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.grey.shade600,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-
-                SizedBox(height: 30),
-
-                // Menu Items
-                _buildMenuItem(
-                  icon: Icons.edit,
-                  title: 'Edit Profil',
-                  onTap: () {
-                    // TODO: Implement edit profile
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Fitur dalam pengembangan')),
-                    );
-                  },
-                ),
-
-                _buildMenuItem(
-                  icon: Icons.settings,
-                  title: 'Pengaturan',
-                  onTap: () {
-                    // TODO: Implement settings
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Fitur dalam pengembangan')),
-                    );
-                  },
-                ),
-
-                _buildMenuItem(
-                  icon: Icons.help,
-                  title: 'Bantuan',
-                  onTap: () {
-                    // TODO: Implement help
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Fitur dalam pengembangan')),
-                    );
-                  },
-                ),
-
-                Spacer(),
-
-              ],
-            ),
-          ),
+  void _editProfile() {
+    // TODO: Implement edit profile functionality
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Fitur edit profil dalam pengembangan'),
+        backgroundColor: primaryNavy,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
         ),
       ),
     );
   }
 
-  Widget _buildMenuItem({
-    required IconData icon,
-    required String title,
-    required VoidCallback onTap,
-  }) {
-    return Card(
-      margin: EdgeInsets.only(bottom: 8),
-      child: ListTile(
-        leading: Container(
-          padding: EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: primaryGreen.withOpacity(0.3),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Icon(icon, color: darkGreen),
-        ),
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: pureWhite,
+      appBar: AppBar(
+        backgroundColor: pureWhite,
+        elevation: 2,
+        shadowColor: Colors.black.withOpacity(0.1),
         title: Text(
-          title,
+          'Profil Saya',
           style: TextStyle(
-            fontWeight: FontWeight.w500,
-            color: darkGreen,
+            color: primaryNavy,
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
           ),
         ),
-        trailing: Icon(Icons.arrow_forward_ios, color: Colors.grey),
-        onTap: onTap,
+        leading: IconButton(
+          icon: Container(
+            padding: EdgeInsets.all(6),
+            decoration: BoxDecoration(
+              color: lightGrey,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(Icons.arrow_back, color: primaryNavy),
+          ),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
+      body: Container(
+        decoration: BoxDecoration(
+          color: pureWhite,
+        ),
+        child: SafeArea(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                children: [
+                  SizedBox(height: 20),
+
+                  // Profile Card
+                  Card(
+                    elevation: 8,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(30.0),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: pureWhite,
+                        border: Border.all(color: lightGrey, width: 1),
+                      ),
+                      child: Column(
+                        children: [
+                          // Profile Picture
+                          Container(
+                            width: 120,
+                            height: 120,
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [primaryNavy, lightNavy],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: primaryNavy.withOpacity(0.3),
+                                  blurRadius: 15,
+                                  offset: Offset(0, 8),
+                                ),
+                              ],
+                            ),
+                            child: Icon(
+                              Icons.person,
+                              size: 60,
+                              color: pureWhite,
+                            ),
+                          ),
+
+                          SizedBox(height: 30),
+
+                          // Name Section
+                          Container(
+                            width: double.infinity,
+                            padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                            decoration: BoxDecoration(
+                              color: lightGrey.withOpacity(0.5),
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: lightGrey, width: 1),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Nama',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: darkGrey,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                SizedBox(height: 5),
+                                Text(
+                                  'Faiza Nur Rafida',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: primaryNavy,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          SizedBox(height: 15),
+
+                          // NIM Section
+                          Container(
+                            width: double.infinity,
+                            padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                            decoration: BoxDecoration(
+                              color: lightGrey.withOpacity(0.5),
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: lightGrey, width: 1),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'NIM',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: darkGrey,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                SizedBox(height: 5),
+                                Text(
+                                  '123220159',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: primaryNavy,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          SizedBox(height: 30),
+
+                          // Edit Profile Button
+                          Container(
+                            width: double.infinity,
+                            height: 55,
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [primaryNavy, lightNavy],
+                                begin: Alignment.centerLeft,
+                                end: Alignment.centerRight,
+                              ),
+                              borderRadius: BorderRadius.circular(15),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: primaryNavy.withOpacity(0.3),
+                                  blurRadius: 10,
+                                  offset: Offset(0, 5),
+                                ),
+                              ],
+                            ),
+                            child: ElevatedButton(
+                              onPressed: _editProfile,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.transparent,
+                                shadowColor: Colors.transparent,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.edit,
+                                    color: pureWhite,
+                                    size: 22,
+                                  ),
+                                  SizedBox(width: 10),
+                                  Text(
+                                    'Edit Profile',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                      color: pureWhite,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  SizedBox(height: 30),
+
+                  // Additional Info Card (Optional)
+                  Card(
+                    elevation: 4,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+
+                  ),
+
+                ],
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }

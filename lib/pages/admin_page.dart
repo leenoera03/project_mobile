@@ -504,10 +504,9 @@ class _AdminPageState extends State<AdminPage> {
                           SizedBox(height: 8),
                           Row(
                             children: [
-                              Icon(Icons.star, color: Colors.amber, size: 18),
                               SizedBox(width: 4),
                               Text(
-                                '${recipe.rating}/5',
+                                recipe.getFormattedPrice(),
                                 style: TextStyle(
                                   fontWeight: FontWeight.w500,
                                   color: Colors.grey[700],
