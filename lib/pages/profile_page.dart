@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 import 'login_page.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -12,6 +14,12 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   String? username;
   String? email;
+  String? profileImagePath;
+  final ImagePicker _picker = ImagePicker();
+
+  // Controllers for editing
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _nimController = TextEditingController();
 
   // Colors - Navy & White theme to match UserPage and LoginPage
   static const Color primaryNavy = Color(0xFF001F3F);
@@ -27,12 +35,33 @@ class _ProfilePageState extends State<ProfilePage> {
     _loadUserInfo();
   }
 
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _nimController.dispose();
+    super.dispose();
+  }
+
   _loadUserInfo() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       username = prefs.getString('username');
       email = prefs.getString('email') ?? 'user@example.com';
+      profileImagePath = prefs.getString('profile_image_path');
+
+      // Set default values for controllers
+      _nameController.text = prefs.getString('full_name') ?? 'Faiza Nur Rafida';
+      _nimController.text = prefs.getString('nim') ?? '123220159';
     });
+  }
+
+  _saveUserInfo() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('full_name', _nameController.text);
+    await prefs.setString('nim', _nimController.text);
+    if (profileImagePath != null) {
+      await prefs.setString('profile_image_path', profileImagePath!);
+    }
   }
 
   _logout() async {
@@ -46,17 +75,221 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
-  void _editProfile() {
-    // TODO: Implement edit profile functionality
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Fitur edit profil dalam pengembangan'),
-        backgroundColor: primaryNavy,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
+  Future<void> _pickImage() async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            'Pilih Sumber Gambar',
+            style: TextStyle(
+              color: primaryNavy,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                leading: Icon(Icons.camera_alt, color: primaryNavy),
+                title: Text('Kamera'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _getImage(ImageSource.camera);
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.photo_library, color: primaryNavy),
+                title: Text('Galeri'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _getImage(ImageSource.gallery);
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _getImage(ImageSource source) async {
+    try {
+      final XFile? image = await _picker.pickImage(
+        source: source,
+        maxWidth: 512,
+        maxHeight: 512,
+        imageQuality: 85,
+      );
+
+      if (image != null) {
+        setState(() {
+          profileImagePath = image.path;
+        });
+        await _saveUserInfo();
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Foto profil berhasil diubah'),
+            backgroundColor: primaryNavy,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Gagal mengambil gambar: ${e.toString()}'),
+          backgroundColor: Colors.red,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
         ),
-      ),
+      );
+    }
+  }
+
+  void _editProfile() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            'Edit Profile',
+            style: TextStyle(
+              color: primaryNavy,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Profile Image Section
+                GestureDetector(
+                  onTap: _pickImage,
+                  child: Container(
+                    width: 100,
+                    height: 100,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [primaryNavy, lightNavy],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: primaryNavy.withOpacity(0.3),
+                          blurRadius: 10,
+                          offset: Offset(0, 5),
+                        ),
+                      ],
+                    ),
+                    child: profileImagePath != null && File(profileImagePath!).existsSync()
+                        ? ClipOval(
+                      child: Image.file(
+                        File(profileImagePath!),
+                        width: 100,
+                        height: 100,
+                        fit: BoxFit.cover,
+                      ),
+                    )
+                        : Icon(
+                      Icons.person,
+                      size: 50,
+                      color: pureWhite,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 10),
+                Text(
+                  'Tap untuk mengubah foto',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: darkGrey,
+                  ),
+                ),
+                SizedBox(height: 20),
+
+                // Name Field
+                TextField(
+                  controller: _nameController,
+                  decoration: InputDecoration(
+                    labelText: 'Nama Lengkap',
+                    labelStyle: TextStyle(color: primaryNavy),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(color: primaryNavy, width: 2),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 15),
+
+                // NIM Field
+                TextField(
+                  controller: _nimController,
+                  decoration: InputDecoration(
+                    labelText: 'NIM',
+                    labelStyle: TextStyle(color: primaryNavy),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(color: primaryNavy, width: 2),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text(
+                'Batal',
+                style: TextStyle(color: darkGrey),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                await _saveUserInfo();
+                Navigator.pop(context);
+                setState(() {}); // Refresh the display
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Profil berhasil diperbarui'),
+                    backgroundColor: primaryNavy,
+                    behavior: SnackBarBehavior.floating,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: primaryNavy,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: Text(
+                'Simpan',
+                style: TextStyle(color: pureWhite),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -117,28 +350,40 @@ class _ProfilePageState extends State<ProfilePage> {
                       child: Column(
                         children: [
                           // Profile Picture
-                          Container(
-                            width: 120,
-                            height: 120,
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: [primaryNavy, lightNavy],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                              ),
-                              shape: BoxShape.circle,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: primaryNavy.withOpacity(0.3),
-                                  blurRadius: 15,
-                                  offset: Offset(0, 8),
+                          GestureDetector(
+                            onTap: _pickImage,
+                            child: Container(
+                              width: 120,
+                              height: 120,
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [primaryNavy, lightNavy],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
                                 ),
-                              ],
-                            ),
-                            child: Icon(
-                              Icons.person,
-                              size: 60,
-                              color: pureWhite,
+                                shape: BoxShape.circle,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: primaryNavy.withOpacity(0.3),
+                                    blurRadius: 15,
+                                    offset: Offset(0, 8),
+                                  ),
+                                ],
+                              ),
+                              child: profileImagePath != null && File(profileImagePath!).existsSync()
+                                  ? ClipOval(
+                                child: Image.file(
+                                  File(profileImagePath!),
+                                  width: 120,
+                                  height: 120,
+                                  fit: BoxFit.cover,
+                                ),
+                              )
+                                  : Icon(
+                                Icons.person,
+                                size: 60,
+                                color: pureWhite,
+                              ),
                             ),
                           ),
 
@@ -166,7 +411,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 ),
                                 SizedBox(height: 5),
                                 Text(
-                                  'Faiza Nur Rafida',
+                                  _nameController.text.isNotEmpty ? _nameController.text : 'Faiza Nur Rafida',
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
@@ -201,7 +446,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 ),
                                 SizedBox(height: 5),
                                 Text(
-                                  '123220159',
+                                  _nimController.text.isNotEmpty ? _nimController.text : '123220159',
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
@@ -270,15 +515,45 @@ class _ProfilePageState extends State<ProfilePage> {
 
                   SizedBox(height: 30),
 
-                  // Additional Info Card (Optional)
-                  Card(
-                    elevation: 4,
-                    shape: RoundedRectangleBorder(
+                  // Logout Button
+                  Container(
+                    width: double.infinity,
+                    height: 55,
+                    decoration: BoxDecoration(
+                      color: Colors.red.shade50,
                       borderRadius: BorderRadius.circular(15),
+                      border: Border.all(color: Colors.red.shade200),
                     ),
-
+                    child: ElevatedButton(
+                      onPressed: _logout,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                        shadowColor: Colors.transparent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.logout,
+                            color: Colors.red,
+                            size: 22,
+                          ),
+                          SizedBox(width: 10),
+                          Text(
+                            'Logout',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.red,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-
                 ],
               ),
             ),

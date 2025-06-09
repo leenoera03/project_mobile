@@ -76,7 +76,7 @@ class _SplashScreenState extends State<SplashScreen> {
             ),
             SizedBox(height: 20),
             Text(
-              'Recipe App',
+              'Find your Recipe',
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
